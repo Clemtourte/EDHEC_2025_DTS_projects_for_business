@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+
+# Environnements virtuels
+.env
+venv/
+.venv/
+env/
+.python-version
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Données et modèles
+*.pkl
+*.h5
+*.model
+
+# Logs
+*.log
