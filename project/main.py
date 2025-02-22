@@ -20,9 +20,8 @@ def send_back_information(input: InputPayload):
     return {"message": input}
 
 @app.post("/predict")
-def send_back_information(input: InputPayload):
+def predict_info(input: InputPayload):
     input = input.dict()
     prediction = model.predict([[input["sepal_length"], input["sepal_width"], input["petal_length"], input["petal_width"]]])
     map_predict_to_label = {0: "setosa", 1: "versicolor", 2: "virginica"}
-    return {"prediction": map_predict_to_label(prediction[0])}
-
+    return {"prediction": map_predict_to_label[prediction[0]]}
