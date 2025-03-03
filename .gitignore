@@ -27,8 +27,11 @@ Thumbs.db
 # Données et modèles
 *.pkl
 
-# But track the model file explicitly
+# Allow these specific .pkl files
 !tuned_rf_model.pkl
+!preprocessing_pipeline.pkl
+!feature_selector.pkl
+
 
 *.joblib
 *.h5
