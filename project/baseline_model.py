@@ -33,9 +33,6 @@ except FileNotFoundError:
 
 # Define function to evaluate regression models
 def evaluate_regression_model(model, X_train, X_val, y_train, y_val, model_name="Model"):
-    """
-    Evaluate a regression model using multiple metrics and return results
-    """
     # Make predictions
     y_train_pred = model.predict(X_train)
     y_val_pred = model.predict(X_val)
@@ -53,7 +50,6 @@ def evaluate_regression_model(model, X_train, X_val, y_train, y_val, model_name=
     train_r2 = r2_score(y_train, y_train_pred)
     val_r2 = r2_score(y_val, y_val_pred)
     
-    # Calculate MAPE (Mean Absolute Percentage Error)
     train_mape = np.mean(np.abs((y_train - y_train_pred) / y_train)) * 100
     val_mape = np.mean(np.abs((y_val - y_val_pred) / y_val)) * 100
     
@@ -67,7 +63,6 @@ def evaluate_regression_model(model, X_train, X_val, y_train, y_val, model_name=
     print(f"{'R²':<20} {train_r2:.4f}{'':>10} {val_r2:.4f}{'':>10}")
     print(f"{'MAPE':<20} {train_mape:.2f}%{'':>9} {val_mape:.2f}%{'':>9}")
     
-    # Return results as dictionary for comparison
     return {
         'model_name': model_name,
         'train_mae': train_mae,
@@ -122,13 +117,11 @@ def plot_predictions(y_true, y_pred, title="Predictions vs Actual Values"):
     plt.tight_layout()
     plt.show()
 
-# Define and evaluate baseline model
 print("\n" + "="*50)
 print("Defining and evaluating Linear Regression as baseline model")
 print("="*50)
 
-# Baseline Model: Linear Regression
-print("\nTraining Linear Regression model...")
+print("\nTraining Linear Regression model")
 lr_model = LinearRegression()
 lr_model.fit(X_train, y_train)
 lr_results = evaluate_regression_model(lr_model, X_train, X_val, y_train, y_val, "Linear Regression")
@@ -139,11 +132,9 @@ plot_predictions(y_val, y_val_pred_lr, "Linear Regression: Predictions vs Actual
 
 # Feature importance for Linear Regression
 try:
-    # Load column info to get feature names
     with open('model_artifacts/column_info.pkl', 'rb') as f:
         column_info = pickle.load(f)
     
-    # Try to load feature selector information
     try:
         with open('model_artifacts/feature_selector.pkl', 'rb') as f:
             feature_selector = pickle.load(f)
@@ -151,7 +142,6 @@ try:
     except:
         print("Feature selector not available as a pickle file")
     
-    # Try to load preprocessing pipeline
     try:
         with open('model_artifacts/preprocessing_pipeline.pkl', 'rb') as f:
             preprocessing_pipeline = pickle.load(f)
@@ -189,38 +179,8 @@ try:
 except Exception as e:
     print(f"Could not analyze feature importance: {e}")
 
-# Discuss the chosen performance metric
-print("\n" + "="*50)
-print("Choosing the Performance Metric")
-print("="*50)
-print("""
-For car price prediction, I'm selecting RMSE (Root Mean Squared Error) as the primary metric for model evaluation because:
-
-1. RMSE penalizes larger errors more heavily than MAE, which is important for car pricing where 
-   large pricing errors can be costly. For example, a $10,000 error on a luxury car is much more 
-   significant than a $1,000 error on an economy car.
-
-2. RMSE is in the same units as the target variable (dollars), making it directly interpretable 
-   to stakeholders. We can say our predictions are off by $X on average.
-
-3. By squaring the errors before averaging, RMSE gives more weight to large errors, which is 
-   appropriate in car pricing where we want to avoid large mispredictions.
-
-Secondary metrics to consider:
-
-- R² provides a sense of how much variance is explained by our model compared to simply predicting the mean.
-  Our baseline Linear Regression model achieved an R² of {:.4f} on the validation set, meaning it explains
-  about {:.1f}% of the variance in car prices.
-
-- MAPE (Mean Absolute Percentage Error) gives us the error in percentage terms, which helps understand 
-  the relative size of the errors. Our baseline model has a MAPE of {:.2f}% on the validation set.
-
-The Linear Regression baseline provides a solid foundation to compare against more sophisticated models
-in the next phase of the project.
-""".format(lr_results['val_r2'], lr_results['val_r2']*100, lr_results['val_mape']))
-
-# Save baseline model
-print("\nSaving baseline model...")
+# Save the model
+print("\nSaving baseline model")
 os.makedirs('model_artifacts', exist_ok=True)
 
 with open('model_artifacts/linear_regression_baseline.pkl', 'wb') as f:

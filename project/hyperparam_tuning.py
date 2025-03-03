@@ -28,7 +28,7 @@ y_train = data['y_train']
 y_val = data['y_val']
 
 # Load the best model
-print("\nLoading best model from comparison phase...")
+print("\nLoading best model from comparison phase")
 with open('model_artifacts/best_model.pkl', 'rb') as f:
     best_model = pickle.load(f)
 
@@ -41,20 +41,20 @@ print(f"\nOriginal Model Performance:")
 print(f"Validation RMSE: ${original_val_rmse:.2f}")
 print(f"Validation R²: {original_val_r2:.4f}")
 
-# Define parameter grid - CORRECTED to avoid errors
+# Define parameter grid
 param_grid = {
     'n_estimators': [100, 200, 300],
     'max_depth': [None, 20, 30],
     'min_samples_split': [2, 5, 10],
     'min_samples_leaf': [1, 2, 4],
-    'max_features': ['sqrt', 'log2', None]  # Valid options only, removed 'auto'
+    'max_features': ['sqrt', 'log2', None]
 }
 
 # Initialize base model
 rf = RandomForestRegressor(random_state=42)
 
 # Set up GridSearchCV
-print("\nStarting hyperparameter tuning with GridSearchCV...")
+print("\nStarting hyperparameter tuning with GridSearchCV")
 grid_search = GridSearchCV(
     estimator=rf,
     param_grid=param_grid,

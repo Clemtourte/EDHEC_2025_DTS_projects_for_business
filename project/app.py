@@ -47,7 +47,6 @@ class CarFeatures(BaseModel):
     wheel: str = Field(..., example="Left")
 
 def validate_door_format(door: str):
-    """Ensure doors contains only digits"""
     if not re.match(r'^\d+$', door):
         raise HTTPException(
             status_code=400,
@@ -86,7 +85,6 @@ def predict_price(car: CarFeatures):
                 detail=f"Invalid wheel: '{car_data['wheel']}'. Valid options: {VALID_WHEEL}"
             )
 
-        # Map to DataFrame with correct feature names
         input_dict = {
             "Prod. year": car_data["prod_year"],
             "Mileage": car_data["mileage"],
@@ -115,11 +113,9 @@ def predict_price(car: CarFeatures):
         # Create DataFrame
         input_df = pd.DataFrame([input_dict])
 
-        # Debug: Print input features
         print("\nInput Features:")
         print(input_df.to_string(index=False))
 
-        # Process data
         X_processed = preprocessing_pipeline.transform(input_df)
         X_selected = feature_selector.transform(X_processed)
         
@@ -127,7 +123,7 @@ def predict_price(car: CarFeatures):
         prediction = model.predict(X_selected)[0]
         prediction = max(0, round(prediction, 2))
 
-        # Debug: Print prediction
+        # Print prediction
         print(f"\nPredicted Price: ${prediction:,.2f}")
 
         return {"predicted_price": prediction}

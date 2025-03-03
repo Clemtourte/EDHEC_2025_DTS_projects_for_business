@@ -17,7 +17,6 @@ warnings.filterwarnings('ignore')
 plt.style.use('seaborn-v0_8-whitegrid')
 sns.set_palette("viridis")
 
-# Create output directory for model artifacts if it doesn't exist
 os.makedirs('model_artifacts', exist_ok=True)
 
 print("="*50)
@@ -53,9 +52,6 @@ except FileNotFoundError:
 
 # Define function to evaluate regression models
 def evaluate_regression_model(model, X_train, X_val, y_train, y_val, model_name="Model", verbose=False):
-    """
-    Evaluate a regression model using multiple metrics and return results
-    """
     # Make predictions
     y_train_pred = model.predict(X_train)
     y_val_pred = model.predict(X_val)
@@ -77,7 +73,6 @@ def evaluate_regression_model(model, X_train, X_val, y_train, y_val, model_name=
     train_r2 = r2_score(y_train, y_train_pred)
     val_r2 = r2_score(y_val, y_val_pred)
     
-    # Calculate MAPE (Mean Absolute Percentage Error)
     train_mape = np.mean(np.abs((y_train - y_train_pred) / y_train)) * 100
     val_mape = np.mean(np.abs((y_val - y_val_pred) / y_val)) * 100
     
@@ -92,7 +87,6 @@ def evaluate_regression_model(model, X_train, X_val, y_train, y_val, model_name=
         print(f"{'R²':<20} {train_r2:.4f}{'':>10} {val_r2:.4f}{'':>10}")
         print(f"{'MAPE':<20} {train_mape:.2f}%{'':>9} {val_mape:.2f}%{'':>9}")
     
-    # Return results as dictionary for comparison
     return {
         'model_name': model_name,
         'train_mae': train_mae,
@@ -126,11 +120,9 @@ print("Training and evaluating models...")
 print("="*50)
 
 results = []
-# Add baseline results if available
 if baseline_metrics:
     results.append(baseline_metrics)
 
-# Store trained models
 trained_models = {}
 
 # Process each model with a progress indicator
@@ -179,9 +171,8 @@ plt.xlabel('Validation R²')
 # Performance vs. Training Time
 plt.subplot(2, 2, 4)
 plt.scatter(comparison_df['training_time'], comparison_df['val_rmse'], s=100, alpha=0.7)
-# Annotate each point with model name
 for i, row in comparison_df.iterrows():
-    plt.annotate(row['model_name'].split()[0],  # Use only first word to save space
+    plt.annotate(row['model_name'].split()[0],
                  (row['training_time'], row['val_rmse']),
                  xytext=(7, 0), 
                  textcoords='offset points',
@@ -236,28 +227,3 @@ if baseline_metrics:
     print(f"\nImprovement over {baseline_name}:")
     print(f"RMSE reduction: {rmse_improvement:.2f}%")
     print(f"R² improvement: {r2_improvement:.2f}%")
-
-print("\nAnalysis:")
-print(f"""
-Based on our model comparison, we can draw these conclusions:
-
-1. The {best_model_name} delivers the best performance with RMSE of ${best_rmse:.2f}.
-
-2. This represents a {"significant" if baseline_metrics and rmse_improvement > 10 else "modest"} 
-   improvement over the baseline Linear Regression model.
-
-3. Key observations from our model comparison:
-   - Tree-based models generally outperform linear models, suggesting non-linear relationships
-   - There's a clear trade-off between model complexity and training time
-   - The best model achieves an R² of {best_r2:.4f}, explaining {best_r2*100:.1f}% of price variance
-
-4. The best model has been saved as 'best_model.pkl' for hyperparameter tuning.
-
-Next step: Hyperparameter tuning to further improve the {best_model_name} performance.
-""")
-
-print("\nFiles saved in model_artifacts directory:")
-print("1. model_comparison_summary.png - Visualization of all model performances")
-print("2. best_model.pkl - The best performing model for hyperparameter tuning")
-print("3. all_model_results.pkl - Complete comparison results")
-print("4. all_trained_models.pkl - All trained models for reference")
