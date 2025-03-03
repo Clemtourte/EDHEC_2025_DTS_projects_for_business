@@ -55,18 +55,23 @@ The trained model was deployed as an API using FastAPI and hosted on Render. The
 }
 
 ### Project Structure
+|-- requirements.txt             # Dependencies for the project\
+|-- .gitignore\
+|-- README.md\
 |-- project/
-    |-- app.py                  # API Implementation using FastAPI
-    |-- baseline_model.py        # Baseline model (Linear Regression)
-    |-- comp_models.py           # Model comparison script
-    |-- hyperparam_tuning.py     # Hyperparameter tuning script
-    |-- model_artifacts/         # Saved models, preprocessing pipeline, and artifacts
-    |-- requirements.txt         # Dependencies for the project
+>    |-- app.py                  # API Implementation using FastAPI\
+>    |-- baseline_model.py        # Baseline model (Linear Regression)\
+>    |-- comp_models.py           # Model comparison script\
+>    |-- hyperparam_tuning.py     # Hyperparameter tuning script\
+>    |-- clean_data.ipynb         # data cleaning notebook\
+>    |-- run_project.ipynb        # notebook including a run of all files to have a direct visual output\
+>    |-- model_artifacts/         # Saved models, preprocessing pipeline, and artifacts\
+
 
 ### How to Run Locally
 #### Clone the Repository
 
-git clone <your_repository_url>
+git clone https://github.com/Clemtourte/EDHEC_2025_DTS_projects_for_business/
 cd project/
 
 #### Set Up a Virtual Environment (pyenv used in our case with WSL, but you can very well use virtualenv as shown below)
@@ -84,5 +89,5 @@ uvicorn app:app --host 0.0.0.0 --port 8000
 
 ### Deployment
 The API is deployed on Render. You can test it using:
-API URL: https://edhec-2025-dts-projects-for-business.onrender.com/
-Swagger Docs: https://edhec-2025-dts-projects-for-business.onrender.com/docs
+- API URL: https://edhec-2025-dts-projects-for-business.onrender.com/
+- Swagger Docs: https://edhec-2025-dts-projects-for-business.onrender.com/docs
