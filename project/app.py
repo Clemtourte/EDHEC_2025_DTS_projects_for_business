@@ -55,6 +55,11 @@ def validate_door_format(door: str):
         )
     return door
 
+@app.get("/")
+def home():
+    return {"message": "Welcome to the Car Price Prediction API! Go to /docs for usage details."}
+
+
 @app.post("/predict/")
 def predict_price(car: CarFeatures):
     try:
