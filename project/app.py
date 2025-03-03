@@ -4,19 +4,22 @@ import pickle
 import pandas as pd
 import uvicorn
 import re
+import os
 
 app = FastAPI(
     title="Car Price Prediction API",
     description="Predict car prices using a tuned Random Forest model",
     version="1.0.0"
 )
-
-# Load artifacts
-with open("model_artifacts/tuned_rf_model.pkl", "rb") as f:
+model_dir = os.path.join(os.path.dirname(__file__), "model_artifacts")
+# Load the necessary files
+with open(os.path.join(model_dir, "tuned_rf_model.pkl"), "rb") as f:
     model = pickle.load(f)
-with open("model_artifacts/preprocessing_pipeline.pkl", "rb") as f:
+
+with open(os.path.join(model_dir, "preprocessing_pipeline.pkl"), "rb") as f:
     preprocessing_pipeline = pickle.load(f)
-with open("model_artifacts/feature_selector.pkl", "rb") as f:
+
+with open(os.path.join(model_dir, "feature_selector.pkl"), "rb") as f:
     feature_selector = pickle.load(f)
 
 # Define allowed categories from training data
